@@ -333,6 +333,93 @@ function App() {
     alert('Mensagem enviada! Entraremos em contato em breve.');
   };
 
+  // Project Modal Component
+  const ProjectModal = ({ project, onClose }) => {
+    if (!project) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="relative">
+            <img 
+              src={project.image} 
+              alt={project.title}
+              className="w-full h-64 object-cover rounded-t-2xl"
+            />
+            <button 
+              onClick={onClose}
+              className="absolute top-4 right-4 bg-white bg-opacity-90 rounded-full p-2 hover:bg-opacity-100 transition-all"
+            >
+              <i className="fas fa-times text-gray-600"></i>
+            </button>
+            <div className="absolute bottom-4 left-6">
+              <span className={`${project.categoryColor} text-white text-sm font-medium px-3 py-1 rounded-full`}>
+                {project.category}
+              </span>
+            </div>
+          </div>
+          
+          <div className="p-8">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">{project.title}</h2>
+            <p className="text-lg text-gray-600 mb-6">{project.description}</p>
+            
+            <div className="grid md:grid-cols-2 gap-8 mb-8">
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Informações do Projeto</h3>
+                <div className="space-y-3">
+                  <div>
+                    <span className="font-medium text-gray-700">Duração:</span>
+                    <span className="ml-2 text-gray-600">{project.duration}</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-700">Minha Função:</span>
+                    <span className="ml-2 text-gray-600">{project.role}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Tecnologias Utilizadas</h3>
+                <div className="flex flex-wrap gap-2">
+                  {project.technologies.map((tech, index) => (
+                    <span 
+                      key={index}
+                      className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Principais Funcionalidades</h3>
+              <ul className="grid md:grid-cols-2 gap-2">
+                {project.features.map((feature, index) => (
+                  <li key={index} className="flex items-start">
+                    <i className="fas fa-check text-green-500 mt-1 mr-3 flex-shrink-0"></i>
+                    <span className="text-gray-600">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Desafios e Soluções</h3>
+              <p className="text-gray-600 leading-relaxed">{project.challenges}</p>
+            </div>
+            
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-xl">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Resultados Alcançados</h3>
+              <p className="text-gray-700 leading-relaxed">{project.results}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="font-sans bg-gray-50 text-gray-800 overflow-x-hidden">
       {/* 3D Background Canvas - Fixed positioning */}
