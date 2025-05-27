@@ -179,10 +179,6 @@ Este projeto é pessoal e está disponível como portfólio. Sinta-se livre para
 
 **Desenvolvido com ❤️ por Celso L. Cavalheiro**
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
 ### Analyzing the Bundle Size
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
