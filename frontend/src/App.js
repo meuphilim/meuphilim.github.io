@@ -2,7 +2,7 @@ import React, { Suspense, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Float, Text3D, Center, MeshWobbleMaterial } from '@react-three/drei';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
-import { useIntersectionObserver } from 'react-intersection-observer';
+import { useInView } from 'react-intersection-observer';
 import { 
   Github, 
   Instagram, 
