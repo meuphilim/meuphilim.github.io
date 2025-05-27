@@ -594,82 +594,47 @@ function App() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Project 1 */}
-            <div className="project-card bg-white rounded-xl overflow-hidden shadow-lg">
-              <div className="relative h-48 overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5" 
-                  alt="Sistema de Agendamento" 
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-6">
-                  <span className="bg-blue-500 text-white text-xs font-medium px-2.5 py-0.5 rounded">Sistema Web</span>
+            {projectsData.map((project, index) => (
+              <div key={project.id} className="project-card bg-white rounded-xl overflow-hidden shadow-lg">
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src={project.image} 
+                    alt={project.title} 
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 p-6">
+                    <span className={`${project.categoryColor} text-white text-xs font-medium px-2.5 py-0.5 rounded`}>
+                      {project.category}
+                    </span>
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-2">{project.title}</h3>
+                  <p className="text-gray-600 mb-4">
+                    {project.description}
+                  </p>
+                  <button 
+                    onClick={() => setSelectedProject(project)}
+                    className="text-blue-500 font-medium hover:text-blue-700 flex items-center transition-colors group"
+                  >
+                    Ver detalhes 
+                    <i className="fas fa-arrow-right ml-2 group-hover:ml-3 transition-all duration-300"></i>
+                  </button>
                 </div>
               </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Sistema de Agendamento</h3>
-                <p className="text-gray-600 mb-4">
-                  Plataforma completa para pousadas com sistema de reservas online e gestão de quartos.
-                </p>
-                <a href="#" className="text-blue-500 font-medium hover:text-blue-700 flex items-center transition-colors">
-                  Ver detalhes <i className="fas fa-arrow-right ml-2"></i>
-                </a>
-              </div>
-            </div>
-            
-            {/* Project 2 */}
-            <div className="project-card bg-white rounded-xl overflow-hidden shadow-lg">
-              <div className="relative h-48 overflow-hidden">
-                <img 
-                  src="https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg" 
-                  alt="Dashboard de Monitoramento" 
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-6">
-                  <span className="bg-purple-500 text-white text-xs font-medium px-2.5 py-0.5 rounded">Dashboard</span>
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Dashboard de Monitoramento</h3>
-                <p className="text-gray-600 mb-4">
-                  Interface interativa para monitoramento em tempo real de infraestrutura de rede.
-                </p>
-                <a href="#" className="text-blue-500 font-medium hover:text-blue-700 flex items-center transition-colors">
-                  Ver detalhes <i className="fas fa-arrow-right ml-2"></i>
-                </a>
-              </div>
-            </div>
-            
-            {/* Project 3 */}
-            <div className="project-card bg-white rounded-xl overflow-hidden shadow-lg">
-              <div className="relative h-48 overflow-hidden">
-                <img 
-                  src="https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg" 
-                  alt="Gateway de Pagamentos" 
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-6">
-                  <span className="bg-green-500 text-white text-xs font-medium px-2.5 py-0.5 rounded">FinTech</span>
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Gateway de Pagamentos</h3>
-                <p className="text-gray-600 mb-4">
-                  Solução de pagamento simplificada para prestadores locais com painel de controle.
-                </p>
-                <a href="#" className="text-blue-500 font-medium hover:text-blue-700 flex items-center transition-colors">
-                  Ver detalhes <i className="fas fa-arrow-right ml-2"></i>
-                </a>
-              </div>
-            </div>
+            ))}
           </div>
           
           <div className="text-center mt-12">
-            <a href="#" className="inline-flex items-center px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-full hover:bg-gray-50 hover:border-blue-500 hover:text-blue-500 transition-all duration-300">
-              Ver todos os projetos <i className="fas fa-arrow-right ml-2"></i>
+            <a 
+              href="https://github.com/meuphilim" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-full hover:bg-gray-50 hover:border-blue-500 hover:text-blue-500 transition-all duration-300 group"
+            >
+              Ver todos os projetos no GitHub 
+              <i className="fab fa-github ml-2 group-hover:ml-3 transition-all duration-300"></i>
             </a>
           </div>
         </div>
