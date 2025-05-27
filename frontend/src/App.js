@@ -41,7 +41,7 @@ const FloatingGeometry = () => {
 
 // Componente para seção animada
 const AnimatedSection = ({ children, className = "" }) => {
-  const [ref, inView] = useIntersectionObserver({
+  const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: true,
   });
