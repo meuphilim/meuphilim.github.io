@@ -19,6 +19,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 .perspective {
@@ -46,16 +47,19 @@ body {
   -webkit-background-clip: text;
   color: transparent;
   background-image: linear-gradient(45deg, #3b82f6, #8b5cf6);
+  font-weight: 700;
 }
 
-#canvas-container {
-  position: absolute;
+/* Fixed 3D Canvas Container */
+.canvas-container {
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  opacity: 0.15;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.3;
 }
 
 .skill-bar {
@@ -74,8 +78,16 @@ body {
 }
 
 .testimonial-card {
-  background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(243,244,246,0.9));
+  background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(243,244,246,0.95));
   backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+  transform-style: preserve-3d;
+  transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  background: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(243,244,246,0.98));
 }
 
 .project-card {
@@ -84,7 +96,7 @@ body {
 }
 
 .project-card:hover {
-  transform: scale(1.03);
+  transform: scale(1.03) translateY(-5px);
 }
 
 .nav-link {
@@ -95,6 +107,7 @@ body {
   font: inherit;
   cursor: pointer;
   text-decoration: none;
+  padding: 0.5rem 0;
 }
 
 .nav-link::after {
@@ -110,6 +123,17 @@ body {
 
 .nav-link:hover::after {
   width: 100%;
+}
+
+/* Hero Section Improvements */
+.hero-text {
+  opacity: 1;
+  transform: none;
+}
+
+.hero-image {
+  opacity: 1;
+  transform: none;
 }
 
 /* Custom scrollbar */
@@ -139,12 +163,66 @@ a:focus {
 
 /* Mobile optimizations */
 @media (max-width: 768px) {
-  #canvas-container {
-    opacity: 0.1;
+  .canvas-container {
+    opacity: 0.15;
   }
   
   .hero-content {
     z-index: 10;
     position: relative;
   }
+
+  .testimonial-card {
+    transform: none;
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Performance optimizations */
+.will-change {
+  will-change: transform;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+/* Loading states */
+.loading-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Smooth transitions for all interactive elements */
+button, a, .card-3d, .project-card, .testimonial-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced hover effects */
+button:hover {
+  transform: translateY(-1px);
+}
+
+/* Z-index layers */
+.z-background { z-index: 1; }
+.z-content { z-index: 10; }
+.z-header { z-index: 50; }
+
+/* Ensure proper stacking context */
+section {
+  position: relative;
+  z-index: 10;
 }

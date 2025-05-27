@@ -16,149 +16,233 @@ function App() {
     const container = canvasRef.current;
     if (!container) return;
 
-    const width = container.clientWidth;
-    const height = container.clientHeight;
+    let animationId;
+    let renderer, scene, camera, shapes = [];
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(width, height);
-    container.appendChild(renderer.domElement);
+    const initThreeJS = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
 
-    // Create floating shapes
-    const geometry = new THREE.IcosahedronGeometry(1, 0);
-    const material = new THREE.MeshBasicMaterial({ 
-      color: 0x3b82f6,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.6
-    });
-
-    const shapes = [];
-    const count = 8;
-
-    for (let i = 0; i < count; i++) {
-      const shape = new THREE.Mesh(geometry, material.clone());
-      shape.position.x = Math.random() * 20 - 10;
-      shape.position.y = Math.random() * 20 - 10;
-      shape.position.z = Math.random() * 20 - 10;
-      shape.scale.setScalar(Math.random() * 0.5 + 0.5);
-      scene.add(shape);
-      shapes.push(shape);
-    }
-
-    camera.position.z = 5;
-
-    // Animation
-    function animate() {
-      requestAnimationFrame(animate);
-
-      shapes.forEach(shape => {
-        shape.rotation.x += 0.005;
-        shape.rotation.y += 0.01;
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+      renderer = new THREE.WebGLRenderer({ 
+        alpha: true, 
+        antialias: true,
+        powerPreference: "high-performance"
       });
+      
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
 
-      renderer.render(scene, camera);
-    }
+      // Create floating shapes with better visibility
+      const geometry = new THREE.IcosahedronGeometry(1.2, 1);
+      
+      const count = 6; // Reduced count for better performance
 
-    animate();
+      for (let i = 0; i < count; i++) {
+        const material = new THREE.MeshBasicMaterial({ 
+          color: i % 2 === 0 ? 0x3b82f6 : 0x8b5cf6,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.8
+        });
+        
+        const shape = new THREE.Mesh(geometry, material);
+        shape.position.x = (Math.random() - 0.5) * 15;
+        shape.position.y = (Math.random() - 0.5) * 10;
+        shape.position.z = (Math.random() - 0.5) * 10;
+        shape.scale.setScalar(Math.random() * 0.7 + 0.5);
+        
+        // Add random rotation speed
+        shape.rotationSpeed = {
+          x: (Math.random() - 0.5) * 0.02,
+          y: (Math.random() - 0.5) * 0.02,
+          z: (Math.random() - 0.5) * 0.02
+        };
+        
+        scene.add(shape);
+        shapes.push(shape);
+      }
+
+      camera.position.z = 8;
+
+      // Animation loop
+      const animate = () => {
+        animationId = requestAnimationFrame(animate);
+
+        shapes.forEach(shape => {
+          shape.rotation.x += shape.rotationSpeed.x;
+          shape.rotation.y += shape.rotationSpeed.y;
+          shape.rotation.z += shape.rotationSpeed.z;
+          
+          // Add floating motion
+          shape.position.y += Math.sin(Date.now() * 0.001 + shape.position.x) * 0.01;
+        });
+
+        renderer.render(scene, camera);
+      };
+
+      animate();
+    };
 
     // Handle window resize
     const handleResize = () => {
-      const width = container.clientWidth;
-      const height = container.clientHeight;
+      if (!camera || !renderer) return;
+      
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height);
     };
 
+    initThreeJS();
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      container.removeChild(renderer.domElement);
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+      if (renderer && container && renderer.domElement) {
+        container.removeChild(renderer.domElement);
+        renderer.dispose();
+      }
     };
   }, []);
 
-  // Initialize GSAP animations
+  // Initialize GSAP animations with better settings
   useEffect(() => {
-    // Hero section animation
-    gsap.from('.rotate-3d', {
+    // Ensure elements are visible initially
+    gsap.set('.rotate-3d', { opacity: 1 });
+    gsap.set('.testimonial-card', { opacity: 1 });
+    gsap.set('.card-3d', { opacity: 1 });
+    gsap.set('.project-card', { opacity: 1 });
+
+    // Hero section animation - improved
+    gsap.fromTo('.hero-text', {
+      y: 60,
+      opacity: 0
+    }, {
       scrollTrigger: {
         trigger: '#home',
-        start: 'top bottom',
+        start: 'top 80%',
         toggleActions: 'play none none none'
       },
-      y: 50,
-      opacity: 0,
-      duration: 1,
-      stagger: 0.2,
+      y: 0,
+      opacity: 1,
+      duration: 1.2,
       ease: 'power3.out'
     });
 
-    // Skills cards animation
-    gsap.from('.card-3d', {
+    gsap.fromTo('.hero-image', {
+      y: 60,
+      opacity: 0,
+      scale: 0.8
+    }, {
       scrollTrigger: {
-        trigger: '#skills',
+        trigger: '#home',
         start: 'top 80%',
         toggleActions: 'play none none none'
       },
-      y: 50,
-      opacity: 0,
-      duration: 0.8,
-      stagger: 0.2,
+      y: 0,
+      opacity: 1,
+      scale: 1,
+      duration: 1.2,
+      delay: 0.3,
       ease: 'back.out(1.2)'
     });
 
-    // Projects animation
-    gsap.from('.project-card', {
-      scrollTrigger: {
-        trigger: '#projects',
-        start: 'top 80%',
-        toggleActions: 'play none none none'
-      },
+    // Skills cards animation - improved
+    gsap.fromTo('.card-3d', {
       y: 80,
       opacity: 0,
+      rotateY: 15
+    }, {
+      scrollTrigger: {
+        trigger: '#skills',
+        start: 'top 85%',
+        toggleActions: 'play none none none'
+      },
+      y: 0,
+      opacity: 1,
+      rotateY: 0,
+      duration: 0.8,
+      stagger: 0.15,
+      ease: 'back.out(1.2)'
+    });
+
+    // Projects animation - improved
+    gsap.fromTo('.project-card', {
+      y: 100,
+      opacity: 0,
+      scale: 0.9
+    }, {
+      scrollTrigger: {
+        trigger: '#projects',
+        start: 'top 85%',
+        toggleActions: 'play none none none'
+      },
+      y: 0,
+      opacity: 1,
+      scale: 1,
       duration: 0.8,
       stagger: 0.2,
       ease: 'power2.out'
     });
 
-    // Testimonials animation
-    gsap.from('.testimonial-card', {
+    // Testimonials animation - completely rewritten
+    gsap.fromTo('.testimonial-card', {
+      y: 60,
+      opacity: 0,
+      rotateX: 10
+    }, {
       scrollTrigger: {
         trigger: '#testimonials',
-        start: 'top 80%',
+        start: 'top 85%',
         toggleActions: 'play none none none'
       },
-      y: 50,
-      opacity: 0,
+      y: 0,
+      opacity: 1,
+      rotateX: 0,
       duration: 0.8,
       stagger: 0.2,
-      ease: 'back.out(1.2)'
+      ease: 'power2.out'
     });
 
     // Contact form animation
-    gsap.from('form', {
+    gsap.fromTo('.contact-form', {
+      y: 50,
+      opacity: 0
+    }, {
       scrollTrigger: {
         trigger: '#contact',
-        start: 'top 80%',
+        start: 'top 85%',
         toggleActions: 'play none none none'
       },
-      y: 50,
-      opacity: 0,
+      y: 0,
+      opacity: 1,
       duration: 1,
       ease: 'power2.out'
     });
 
-    // Animate skill bars on scroll
+    // Animate skill bars on scroll - improved
     ScrollTrigger.batch(".skill-progress", {
-      onEnter: batch => gsap.to(batch, {
-        width: "100%",
-        duration: 1.5,
-        stagger: 0.2,
-        ease: "power2.out"
-      }),
+      onEnter: batch => {
+        batch.forEach((element, index) => {
+          const targetWidth = element.style.width || '90%';
+          gsap.fromTo(element, {
+            width: '0%'
+          }, {
+            width: targetWidth,
+            duration: 1.5,
+            delay: index * 0.2,
+            ease: "power2.out"
+          });
+        });
+      },
       once: true
     });
 
@@ -183,8 +267,8 @@ function App() {
 
   return (
     <div className="font-sans bg-gray-50 text-gray-800 overflow-x-hidden">
-      {/* 3D Background Canvas */}
-      <div ref={canvasRef} id="canvas-container"></div>
+      {/* 3D Background Canvas - Fixed positioning */}
+      <div ref={canvasRef} className="canvas-container"></div>
 
       {/* Header */}
       <header className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
@@ -233,10 +317,10 @@ function App() {
         )}
       </header>
 
-      {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center pt-20 perspective">
-        <div className="container mx-auto px-6 py-20 md:py-32 flex flex-col md:flex-row items-center">
-          <div className="md:w-1/2 mb-12 md:mb-0 rotate-3d">
+      {/* Hero Section - Improved Structure */}
+      <section id="home" className="min-h-screen flex items-center pt-20 perspective relative">
+        <div className="container mx-auto px-6 py-20 md:py-32 flex flex-col md:flex-row items-center relative z-10">
+          <div className="md:w-1/2 mb-12 md:mb-0 hero-text">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
               <span className="gradient-text">Transformando ideias</span><br />
               em experiências digitais
@@ -247,22 +331,22 @@ function App() {
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
               <button 
                 onClick={() => scrollToSection('#projects')}
-                className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full font-medium text-center hover:shadow-lg transition-all duration-300"
+                className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full font-medium text-center hover:shadow-lg hover:scale-105 transition-all duration-300"
               >
                 Ver projetos
               </button>
               <button 
                 onClick={() => scrollToSection('#contact')}
-                className="px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-full font-medium text-center hover:border-blue-500 hover:text-blue-500 transition-all duration-300"
+                className="px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-full font-medium text-center hover:border-blue-500 hover:text-blue-500 hover:scale-105 transition-all duration-300"
               >
                 Contato
               </button>
             </div>
           </div>
-          <div className="md:w-1/2 flex justify-center rotate-3d">
+          <div className="md:w-1/2 flex justify-center hero-image">
             <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full opacity-20 blur-xl"></div>
-              <div className="absolute inset-0 bg-white rounded-full shadow-xl flex items-center justify-center overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full opacity-20 blur-xl animate-pulse"></div>
+              <div className="absolute inset-0 bg-white rounded-full shadow-2xl flex items-center justify-center overflow-hidden hover:scale-105 transition-transform duration-500">
                 <img 
                   src="https://images.unsplash.com/photo-1560250097-0b93528c311a" 
                   alt="Celso L. Cavalheiro" 
@@ -275,7 +359,7 @@ function App() {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="py-20 bg-gray-100">
+      <section id="skills" className="py-20 bg-gray-100 relative z-10">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Minhas Especialidades</h2>
@@ -345,7 +429,7 @@ function App() {
       </section>
 
       {/* Projects Section */}
-      <section id="projects" className="py-20">
+      <section id="projects" className="py-20 relative z-10">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Projetos Recentes</h2>
@@ -373,7 +457,7 @@ function App() {
                 <p className="text-gray-600 mb-4">
                   Plataforma completa para pousadas com sistema de reservas online e gestão de quartos.
                 </p>
-                <a href="#" className="text-blue-500 font-medium hover:text-blue-700 flex items-center">
+                <a href="#" className="text-blue-500 font-medium hover:text-blue-700 flex items-center transition-colors">
                   Ver detalhes <i className="fas fa-arrow-right ml-2"></i>
                 </a>
               </div>
@@ -397,7 +481,7 @@ function App() {
                 <p className="text-gray-600 mb-4">
                   Interface interativa para monitoramento em tempo real de infraestrutura de rede.
                 </p>
-                <a href="#" className="text-blue-500 font-medium hover:text-blue-700 flex items-center">
+                <a href="#" className="text-blue-500 font-medium hover:text-blue-700 flex items-center transition-colors">
                   Ver detalhes <i className="fas fa-arrow-right ml-2"></i>
                 </a>
               </div>
@@ -421,7 +505,7 @@ function App() {
                 <p className="text-gray-600 mb-4">
                   Solução de pagamento simplificada para prestadores locais com painel de controle.
                 </p>
-                <a href="#" className="text-blue-500 font-medium hover:text-blue-700 flex items-center">
+                <a href="#" className="text-blue-500 font-medium hover:text-blue-700 flex items-center transition-colors">
                   Ver detalhes <i className="fas fa-arrow-right ml-2"></i>
                 </a>
               </div>
@@ -436,8 +520,8 @@ function App() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 bg-gray-100">
+      {/* Testimonials Section - Completely Restructured */}
+      <section id="testimonials" className="py-20 bg-gray-100 relative z-10">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Depoimentos</h2>
@@ -446,19 +530,24 @@ function App() {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Testimonial 1 */}
-            <div className="testimonial-card p-8 rounded-xl shadow-md">
+            <div className="testimonial-card p-8 rounded-xl shadow-md backdrop-blur-sm hover:shadow-lg transition-all duration-300">
               <div className="flex items-center mb-6">
-                <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-                  <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Cliente" className="w-full h-full object-cover" />
+                <div className="w-12 h-12 rounded-full overflow-hidden mr-4 flex-shrink-0">
+                  <img 
+                    src="https://randomuser.me/api/portraits/women/43.jpg" 
+                    alt="Ana Silva" 
+                    className="w-full h-full object-cover" 
+                    loading="lazy"
+                  />
                 </div>
-                <div>
-                  <h4 className="font-bold">Ana Silva</h4>
+                <div className="min-w-0">
+                  <h4 className="font-bold text-gray-900">Ana Silva</h4>
                   <p className="text-gray-600 text-sm">CEO, TechSolutions</p>
                 </div>
               </div>
-              <p className="text-gray-700 italic mb-4">
+              <p className="text-gray-700 italic mb-6 leading-relaxed">
                 "Trabalhar com o Celso foi uma experiência incrível. Entregou nosso projeto antes do prazo e com qualidade excepcional. Recomendo fortemente!"
               </p>
               <div className="flex text-yellow-400">
@@ -471,17 +560,22 @@ function App() {
             </div>
             
             {/* Testimonial 2 */}
-            <div className="testimonial-card p-8 rounded-xl shadow-md">
+            <div className="testimonial-card p-8 rounded-xl shadow-md backdrop-blur-sm hover:shadow-lg transition-all duration-300">
               <div className="flex items-center mb-6">
-                <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-                  <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Cliente" className="w-full h-full object-cover" />
+                <div className="w-12 h-12 rounded-full overflow-hidden mr-4 flex-shrink-0">
+                  <img 
+                    src="https://randomuser.me/api/portraits/men/32.jpg" 
+                    alt="Carlos Mendes" 
+                    className="w-full h-full object-cover" 
+                    loading="lazy"
+                  />
                 </div>
-                <div>
-                  <h4 className="font-bold">Carlos Mendes</h4>
+                <div className="min-w-0">
+                  <h4 className="font-bold text-gray-900">Carlos Mendes</h4>
                   <p className="text-gray-600 text-sm">Diretor, DigitalAgency</p>
                 </div>
               </div>
-              <p className="text-gray-700 italic mb-4">
+              <p className="text-gray-700 italic mb-6 leading-relaxed">
                 "Profissional altamente qualificado e comprometido. Sua capacidade de resolver problemas complexos é impressionante. Nosso projeto teve um aumento de 40% nas conversões."
               </p>
               <div className="flex text-yellow-400">
@@ -494,18 +588,23 @@ function App() {
             </div>
             
             {/* Testimonial 3 */}
-            <div className="testimonial-card p-8 rounded-xl shadow-md">
+            <div className="testimonial-card p-8 rounded-xl shadow-md backdrop-blur-sm hover:shadow-lg transition-all duration-300 md:col-span-2 lg:col-span-1">
               <div className="flex items-center mb-6">
-                <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-                  <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Cliente" className="w-full h-full object-cover" />
+                <div className="w-12 h-12 rounded-full overflow-hidden mr-4 flex-shrink-0">
+                  <img 
+                    src="https://randomuser.me/api/portraits/women/65.jpg" 
+                    alt="Juliana Oliveira" 
+                    className="w-full h-full object-cover" 
+                    loading="lazy"
+                  />
                 </div>
-                <div>
-                  <h4 className="font-bold">Juliana Oliveira</h4>
+                <div className="min-w-0">
+                  <h4 className="font-bold text-gray-900">Juliana Oliveira</h4>
                   <p className="text-gray-600 text-sm">Gerente, InovaTech</p>
                 </div>
               </div>
-              <p className="text-gray-700 italic mb-4">
-                "Excelente comunicação e profissionalismo. Entendeu perfeitamente nossas necessidades e entregou uma solução que superou nossas expectativas. Parceria certa para projetos desafiadores."
+              <p className="text-gray-700 italic mb-6 leading-relaxed">
+                "Excelente comunicação e profissionalismo. Entendeu perfeitamente nossas necessidades e entregou uma solução que superou nossas expectativas."
               </p>
               <div className="flex text-yellow-400">
                 <i className="fas fa-star"></i>
@@ -520,7 +619,7 @@ function App() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-gradient-to-br from-blue-50 to-purple-50">
+      <section id="contact" className="py-20 bg-gradient-to-br from-blue-50 to-purple-50 relative z-10">
         <div className="container mx-auto px-6">
           <div className="max-w-4xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Vamos trabalhar juntos</h2>
@@ -529,7 +628,7 @@ function App() {
             </p>
           </div>
           
-          <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+          <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden contact-form">
             <div className="md:flex">
               <div className="md:w-1/2 bg-gradient-to-br from-blue-500 to-purple-600 p-8 text-white">
                 <h3 className="text-xl font-bold mb-6">Informações de Contato</h3>
@@ -605,7 +704,7 @@ function App() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-12">
+      <footer className="bg-gray-900 text-gray-300 py-12 relative z-10">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
