@@ -335,10 +335,10 @@ function App() {
 
   // Project Modal Component
   const ProjectModal = ({ project, onClose }) => {
-    if (!project) return null;
-
     // Close modal with ESC key
     useEffect(() => {
+      if (!project) return;
+      
       const handleEscKey = (event) => {
         if (event.key === 'Escape') {
           onClose();
@@ -347,7 +347,9 @@ function App() {
 
       document.addEventListener('keydown', handleEscKey);
       return () => document.removeEventListener('keydown', handleEscKey);
-    }, [onClose]);
+    }, [project, onClose]);
+
+    if (!project) return null;
 
     // Close modal when clicking outside
     const handleBackdropClick = (event) => {
