@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://meuphilim.github.io/sitemap.xml
