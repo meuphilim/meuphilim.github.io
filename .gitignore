@@ -1,70 +1,47 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-.idea/
-dist
-# dependencies
-node_modules/
+# Dependencies
+/node_modules
 /.pnp
 .pnp.js
-.yarn/install-state.gz
-.vscode
-# testing
+
+# Testing
 /coverage
-dump.rdb
-chainlit.md
-.chainlit
-# next.js
-/.next/
-/out/
-.ipynb_checkpoints/
-# production
+
+# Production
 /build
 
-# misc
+# Misc
 .DS_Store
-*.pem
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# debug
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
-# .env*.local
-*token.json*
-# vercel
-.vercel
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-*pyc*
-#*.env
-.ac
-agenthub/agents/youtube/db
-*credentials.json*
+# Optional npm cache directory
+.npm
 
-venv/
-.venv/
-__pycache__/
+# Optional eslint cache
+.eslintcache
 
-# ===================
-# ADDITIONAL RULES TO PREVENT FILE SIZE VIOLATIONS
-# ===================
-# Archive files (anywhere in the project)
-**/*.zip
-**/*.tar.gz
-**/*.tar
-**/*.tgz
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
 
-# Build caches and artifacts
-.cache/
-*.pack
+# OS generated files
+Thumbs.db
+.DS_Store
 
-# System packages
-*.deb
-
-# Python native libraries
-*.dylib
-
-# Android SDK
-android-sdk/
+# GitHub Pages
+/.cache
