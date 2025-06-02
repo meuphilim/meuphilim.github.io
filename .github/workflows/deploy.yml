@@ -6,7 +6,6 @@ on:
   pull_request:
     branches: [ main ]
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -31,6 +30,10 @@ jobs:
     
     - name: Install dependencies
       run: npm ci
+    
+    - name: Setup Environment Variables
+      run: |
+        echo "NEXT_PUBLIC_GH_USERNAME=${{ secrets.GH_USERNAME }}" >> .env.production
     
     - name: Build project
       run: npm run build
