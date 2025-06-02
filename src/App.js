@@ -4,6 +4,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import * as THREE from 'three';
 import './App.css';
 
+const GH_USERNAME = "meuphilim";
+
 // Register GSAP ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
@@ -535,22 +537,12 @@ function App() {
             
             {/* Avatar Container */}
 <div className="absolute inset-0 bg-white rounded-full shadow-2xl flex items-center justify-center overflow-hidden hover:scale-105 transition-transform duration-500">
-  {process.env.REACT_APP_GH_USERNAME ? (
-    <img 
-      src={`https://github.com/${process.env.REACT_APP_GH_USERNAME}.png`}
-      alt="Celso L. Cavalheiro"
-      className="w-full h-full object-cover"
-      onError={(e) => {
-        e.target.onerror = null;
-        e.target.src = "/default-avatar.png";
-      }}
-    />
-  ) : (
-    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-      <span className="text-gray-500">Avatar</span>
-    </div>
-  )}
-</div>
+                <img 
+                  src={`https://github.com/${process.env.GH_USERNAME}.png?size=300`} 
+                  alt="Celso L. Cavalheiro" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
           </div>
         </div>
       </div>
