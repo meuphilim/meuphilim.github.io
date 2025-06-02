@@ -3,7 +3,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import * as THREE from "three";
 import "./App.css";
-import Image from "next/image";
 
 // Register GSAP ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
@@ -584,29 +583,24 @@ function App() {
           >
             <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full opacity-20 blur-xl animate-pulse"></div>
-<div className="absolute inset-0 bg-white rounded-full shadow-2xl flex items-center justify-center overflow-hidden hover:scale-105 transition-transform duration-500">
-  {process.env.NEXT_PUBLIC_GH_USERNAME ? (
-    <Image
-      src={`https://github.com/${process.env.NEXT_PUBLIC_GH_USERNAME}.png`}
-      alt="Celso L. Cavalheiro"
-      width={300}
-      height={300}
-      quality={100}
-      className="object-cover"
-      priority
-      onError={({ target }) => {
-        if (target instanceof HTMLImageElement) {
-          target.onerror = null;
-          target.src = "/default-avatar.png";
-        }
-      }}
-    />
-  ) : (
-    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-      <span className="text-gray-500">Avatar</span>
-    </div>
-  )}
-</div>
+              // Remova a importação do Image e use img diretamente
+              <div className="absolute inset-0 bg-white rounded-full shadow-2xl flex items-center justify-center overflow-hidden hover:scale-105 transition-transform duration-500">
+                {process.env.REACT_APP_GH_USERNAME ? (
+                  <img 
+                    src={`https://github.com/${process.env.REACT_APP_GH_USERNAME}.png`}
+                    alt="Celso L. Cavalheiro"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/default-avatar.png";
+                    }}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-500">Avatar</span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
