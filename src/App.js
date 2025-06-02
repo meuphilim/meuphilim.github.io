@@ -585,26 +585,25 @@ function App() {
             <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full opacity-20 blur-xl animate-pulse"></div>
               <div className="absolute inset-0 bg-white rounded-full shadow-2xl flex items-center justify-center overflow-hidden hover:scale-105 transition-transform duration-500">
-                {process.env.NEXT_PUBLIC_GH_USERNAME ? (
-                  <Image
-                    src={`https://github.com/${process.env.NEXT_PUBLIC_GH_USERNAME}.png`}
-                    alt="Celso L. Cavalheiro"
-                    width={300}
-                    height={300}
-                    quality={100}
-                    className="object-cover"
-                    priority
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = "/default-avatar.png";
-                    }}
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-500">Avatar</span>
-                  </div>
-                )}
-              </div>
+  {process.env.NEXT_PUBLIC_GH_USERNAME ? (
+    <Image
+      src={`https://github.com/${process.env.NEXT_PUBLIC_GH_USERNAME}.png`}
+      alt="Celso L. Cavalheiro"
+      width={300}
+      height={300}
+      quality={100}
+      className="object-cover"
+      priority
+      onError={(e) => {
+        (e.currentTarget as HTMLImageElement).src = "/default-avatar.png";
+      }}
+    />
+  ) : (
+    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+      <span className="text-gray-500">Avatar</span>
+    </div>
+  )}
+</div>
             </div>
           </div>
         </div>
