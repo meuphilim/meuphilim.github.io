@@ -527,7 +527,7 @@ function App() {
               <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full opacity-20 blur-xl animate-pulse"></div>
               <div className="absolute inset-0 bg-white rounded-full shadow-2xl flex items-center justify-center overflow-hidden hover:scale-105 transition-transform duration-500">
                 <img 
-                  src={`https://github.com/${username}.png?size=300`} 
+                  src={`https://github.com/${process.env.NEXT_PUBLIC_GH_USERNAME}.png?size=300`} 
                   alt="Celso L. Cavalheiro" 
                   className="w-full h-full object-cover"
                 />
