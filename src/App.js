@@ -530,6 +530,9 @@ function App() {
                   src={`https://github.com/${process.env.NEXT_PUBLIC_GH_USERNAME}.png?size=300`} 
                   alt="Celso L. Cavalheiro" 
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = '/default-avatar.png';
+                  }}
                 />
               </div>
             </div>
