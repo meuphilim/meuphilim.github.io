@@ -595,8 +595,9 @@ function App() {
                     className="object-cover"
                     priority
                     onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src =
-                        "/default-avatar.png";
+                      if (e.target instanceof HTMLImageElement) {
+                        e.target.src = "/default-avatar.png";
+                      }
                     }}
                   />
                 ) : (
