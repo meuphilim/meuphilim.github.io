@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import * as THREE from 'three';
 import './App.css';
+import Image from 'next/image';
 
 // Register GSAP ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
@@ -497,48 +498,74 @@ function App() {
       </header>
 
       {/* Hero Section - Improved Structure */}
-      <section id="home" className="min-h-screen flex items-center pt-20 perspective relative">
-        <div className="container mx-auto px-6 py-20 md:py-32 flex flex-col md:flex-row items-center relative z-10">
-          <div className="md:w-1/2 mb-12 md:mb-0 hero-text">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              <span className="gradient-text">Transformando ideias</span><br />
-              em experiências digitais
-            </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-lg">
-              Sou um desenvolvedor de soluções digitais com anos de experiência criando aplicações inovadoras e impactantes para clientes em diversos setores.
-            </p>
-            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-              <button 
-                onClick={() => scrollToSection('#projects')}
-                className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full font-medium text-center hover:shadow-lg hover:scale-105 transition-all duration-300"
-              >
-                Ver projetos
-              </button>
-              <button 
-                onClick={() => scrollToSection('#contact')}
-                className="px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-full font-medium text-center hover:border-blue-500 hover:text-blue-500 hover:scale-105 transition-all duration-300"
-              >
-                Contato
-              </button>
-            </div>
+      export function HeroSection() {
+  const scrollToSection = (id: string) => {
+    document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <section id="home" className="min-h-screen flex items-center pt-20 perspective relative">
+      <div className="container mx-auto px-6 py-20 md:py-32 flex flex-col md:flex-row items-center relative z-10">
+        {/* Text Content */}
+        <div className="md:w-1/2 mb-12 md:mb-0 hero-text">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+            <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+              Transformando ideias
+            </span>
+            <br />
+            em experiências digitais
+          </h1>
+          <p className="text-xl text-gray-600 mb-8 max-w-lg">
+            Sou um desenvolvedor de soluções digitais com anos de experiência criando aplicações inovadoras e impactantes para clientes em diversos setores.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button 
+              onClick={() => scrollToSection('#projects')}
+              className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all duration-300"
+            >
+              Ver projetos
+            </button>
+            <button 
+              onClick={() => scrollToSection('#contact')}
+              className="px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-full font-medium hover:border-blue-500 hover:text-blue-500 hover:scale-105 transition-all duration-300"
+            >
+              Contato
+            </button>
           </div>
-          <div className="md:w-1/2 flex justify-center hero-image">
-            <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full opacity-20 blur-xl animate-pulse"></div>
-              <div className="absolute inset-0 bg-white rounded-full shadow-2xl flex items-center justify-center overflow-hidden hover:scale-105 transition-transform duration-500">
-                <img 
-                  src={`https://github.com/${process.env.NEXT_PUBLIC_GH_USERNAME}.png?size=300`} 
-                  alt="Celso L. Cavalheiro" 
-                  className="w-full h-full object-cover"
+        </div>
+
+        {/* Avatar Image */}
+        <div className="md:w-1/2 flex justify-center hero-image">
+          <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
+            {/* Gradient Background Effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full opacity-20 blur-xl animate-pulse"></div>
+            
+            {/* Avatar Container */}
+            <div className="absolute inset-0 bg-white rounded-full shadow-2xl flex items-center justify-center overflow-hidden hover:scale-105 transition-transform duration-500">
+              {process.env.NEXT_PUBLIC_GH_USERNAME ? (
+                <Image
+                  src={`https://github.com/${process.env.NEXT_PUBLIC_GH_USERNAME}.png`}
+                  alt="Celso L. Cavalheiro"
+                  width={300}
+                  height={300}
+                  quality={100}
+                  className="object-cover"
                   onError={(e) => {
                     (e.currentTarget as HTMLImageElement).src = '/default-avatar.png';
                   }}
                 />
-              </div>
+              ) : (
+                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                  <span className="text-gray-500">Avatar</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
+  );
+}
 
       {/* Skills Section */}
       <section id="skills" className="py-20 bg-gray-100 relative z-10">
