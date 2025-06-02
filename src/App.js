@@ -3,7 +3,6 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import * as THREE from 'three';
 import './App.css';
-import Image from 'next/image';
 
 // Register GSAP ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
