@@ -498,12 +498,6 @@ function App() {
       </header>
 
       {/* Hero Section - Improved Structure */}
-      export function HeroSection() {
-  const scrollToSection = (id: string) => {
-    document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  return (
     <section id="home" className="min-h-screen flex items-center pt-20 perspective relative">
       <div className="container mx-auto px-6 py-20 md:py-32 flex flex-col md:flex-row items-center relative z-10">
         {/* Text Content */}
@@ -564,8 +558,6 @@ function App() {
         </div>
       </div>
     </section>
-  );
-}
 
       {/* Skills Section */}
       <section id="skills" className="py-20 bg-gray-100 relative z-10">
