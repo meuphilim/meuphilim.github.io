@@ -537,11 +537,12 @@ function App() {
             
             {/* Avatar Container */}
               <div className="absolute inset-0 bg-white rounded-full shadow-2xl flex items-center justify-center overflow-hidden hover:scale-105 transition-transform duration-500">
-                <img 
-                  src={`https://github.com/${process.env.GH_USERNAME}.png?size=300`} 
-                  alt="Celso L. Cavalheiro" 
-                  className="w-full h-full object-cover"
-                />
+<img 
+  src={`https://github.com/${process.env.REACT_APP_GH_USERNAME}.png?size=300`} 
+  alt="Celso L. Cavalheiro" 
+  className="w-full h-full object-cover"
+/>
+
               </div>
           </div>
         </div>

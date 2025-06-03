@@ -33,7 +33,7 @@ jobs:
     
     - name: Setup Environment Variables
       run: |
-        echo "GH_USERNAME=${{ secrets.GH_USERNAME }}" >> .env.production
+        echo "REACT_APP_GH_USERNAME=${{ secrets.GH_USERNAME }}" >> .env.production
     
     - name: Build project
       run: npm run build
