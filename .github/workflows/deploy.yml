@@ -52,6 +52,7 @@ jobs:
       env:
         CI: false
         GENERATE_SOURCEMAP: false
+        DISABLE_ESLINT_PLUGIN: true
     
     - name: Upload build files
       uses: actions/upload-pages-artifact@v3
@@ -73,3 +74,4 @@ jobs:
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
+# Atualizar automaticamente a cada 12 horas
