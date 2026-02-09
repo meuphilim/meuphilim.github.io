@@ -35,11 +35,11 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
+        cache: 'npm'
     
     - name: Install dependencies
       working-directory: ./frontend
-      run: yarn install --frozen-lockfile
+      run: npm ci
     
     - name: Setup Environment Variables
       working-directory: ./frontend
@@ -48,7 +48,7 @@ jobs:
     
     - name: Build project
       working-directory: ./frontend
-      run: yarn build
+      run: npm run build
       env:
         CI: false
         GENERATE_SOURCEMAP: false
